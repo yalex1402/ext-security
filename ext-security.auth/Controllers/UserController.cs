@@ -89,7 +89,7 @@ namespace ext_security.auth.Controllers
             }
         }
 
-        public string GenerateToken(AppUser user)
+        private string GenerateToken(AppUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_tokenConfig.SecretKey);
