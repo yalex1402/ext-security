@@ -60,6 +60,36 @@ namespace secure_lib.Controllers.Security
             }
         }
 
+        [HttpGet("GetRole/{roleName}")]
+        public async Task<IActionResult> GetRoleAsync(string roleName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(roleName))
+                {
+                    return BadRequest("Role name cannot be empty");
+                }
+                var result = await _repository.GetRoleByNameAsync(roleName);
+                if (result == null)
+                {
+                    return NotFound($"Role {roleName} is not found");
+                }
+                return Ok(result);
+            }
+            catch (SqlException sqlex)
+            {
+                string innerMessage = sqlex.InnerException != null ? sqlex.InnerException.Message : string.Empty;
+                string errorMessage = $"{sqlex.Message} - InnerException: {innerMessage}";
+                return this.Problem(sqlex.Message, statusCode: 400);
+            }
+            catch (Exception ex)
+            {
+                string innerMessage = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
+                string errorMessage = $"{ex.Message} - InnerException: {innerMessage}";
+                return this.Problem(errorMessage, statusCode: 400);
+            }
+        }
+
         [HttpGet("GetRoles")]
         public async Task<IActionResult> GetRolesAsync()
         {
