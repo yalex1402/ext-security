@@ -39,8 +39,8 @@ namespace secure_lib.Controllers.Security
                 model.Id = Guid.NewGuid().ToString();
                 model.Status = true;
                 model.DateCreated = DateTime.UtcNow;
-                bool result = await _repository.CreateRoleAsync(_mapper.Map<RoleDtoModel>(model));
-                if (!result)
+                var result = await _repository.CreateRoleAsync(_mapper.Map<RoleDtoModel>(model));
+                if (result == null)
                 {
                     return BadRequest("Role could not be created");
                 }
@@ -50,7 +50,7 @@ namespace secure_lib.Controllers.Security
             {
                 string innerMessage = sqlex.InnerException != null ? sqlex.InnerException.Message : string.Empty;
                 string errorMessage = $"{sqlex.Message} - InnerException: {innerMessage}";
-                return this.Problem(sqlex.Message, statusCode:400);
+                return this.Problem(sqlex.Message, statusCode: 400);
             }
             catch (Exception ex)
             {

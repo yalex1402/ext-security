@@ -5,6 +5,6 @@ namespace secure_lib.Data.Interfaces.Repositories
 {
     public interface IRoleRepository
     {
-        Task<bool> CreateRoleAsync(RoleDtoModel model);
+        Task<RoleDtoModel> CreateRoleAsync(RoleDtoModel model);
     }
 }

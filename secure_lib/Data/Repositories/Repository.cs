@@ -17,15 +17,15 @@ namespace secure_lib.Data.Repositories
             _mapper = mapper;
         }
 
-        public async Task<bool> CreateRoleAsync(RoleDtoModel model)
+        public async Task<RoleDtoModel> CreateRoleAsync(RoleDtoModel model)
         {
             _dataContext.Roles.Add(_mapper.Map<Role>(model));
             int result = await _dataContext.SaveChangesAsync();
             if (result != 0)
             {
-                return true;
+                return model;
             }
-            return false;
+            return null;
         }
     }
 }
