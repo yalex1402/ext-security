@@ -59,5 +59,27 @@ namespace secure_lib.Controllers.Security
                 return this.Problem(errorMessage, statusCode: 400);
             }
         }
+
+        [HttpGet("GetRoles")]
+        public async Task<IActionResult> GetRolesAsync()
+        {
+            try
+            {
+                var result = await _repository.GetActiveRolesAsync();
+                return Ok(result);
+            }
+            catch (SqlException sqlex)
+            {
+                string innerMessage = sqlex.InnerException != null ? sqlex.InnerException.Message : string.Empty;
+                string errorMessage = $"{sqlex.Message} - InnerException: {innerMessage}";
+                return this.Problem(sqlex.Message, statusCode: 400);
+            }
+            catch (Exception ex)
+            {
+                string innerMessage = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
+                string errorMessage = $"{ex.Message} - InnerException: {innerMessage}";
+                return this.Problem(errorMessage, statusCode: 400);
+            }
+        }
     }
 }
