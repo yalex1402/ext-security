@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using secure_lib.Data;
+using secure_lib.Data.Interfaces.Repositories;
+using secure_lib.Data.Repositories;
 
 namespace secure_lib
 {
@@ -27,10 +29,12 @@ namespace secure_lib
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddScoped<IRepository,Repository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
