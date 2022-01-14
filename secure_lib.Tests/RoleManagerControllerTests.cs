@@ -37,5 +37,68 @@ namespace secure_lib.Tests
             //Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
+
+        [Fact]
+        public async Task GetRoleAsync_WithUnexistingRole_ReturnsNotFound()
+        {
+            //Arrange
+            string roleName = "Developer";
+            var repositoryStub = new Mock<IRepository>();
+            repositoryStub
+                .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
+                .ReturnsAsync((RoleDtoModel)null);
+            var loggerStub = new Mock<ILogger<RoleManagerController>>();
+            var mapperStub = new Mock<IMapper>();
+            mapperStub.Setup(map => map.Map<RoleDtoModel>(It.IsAny<AddUpdateRoleModel>())).Returns(new RoleDtoModel());
+            var controller = new RoleManagerController(loggerStub.Object,mapperStub.Object,repositoryStub.Object);
+
+            //Act
+            var result = await controller.GetRoleAsync(roleName);
+
+            //Assert
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task GetRoleAsync_WithInvalidRoleName_ReturnsBadRequest()
+        {
+            //Arrange
+            string roleName = "";
+            var repositoryStub = new Mock<IRepository>();
+            repositoryStub
+                .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
+                .ReturnsAsync((RoleDtoModel)null);
+            var loggerStub = new Mock<ILogger<RoleManagerController>>();
+            var mapperStub = new Mock<IMapper>();
+            mapperStub.Setup(map => map.Map<RoleDtoModel>(It.IsAny<AddUpdateRoleModel>())).Returns(new RoleDtoModel());
+            var controller = new RoleManagerController(loggerStub.Object,mapperStub.Object,repositoryStub.Object);
+
+            //Act
+            var result = await controller.GetRoleAsync(roleName);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task GetRoleAsync_WithExistingRole_ReturnsOk()
+        {
+            //Arrange
+            string roleName = "Admin";
+            var repositoryStub = new Mock<IRepository>();
+            repositoryStub
+                .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
+                .ReturnsAsync(new RoleDtoModel());
+            var loggerStub = new Mock<ILogger<RoleManagerController>>();
+            var mapperStub = new Mock<IMapper>();
+            mapperStub.Setup(map => map.Map<RoleDtoModel>(It.IsAny<AddUpdateRoleModel>())).Returns(new RoleDtoModel());
+            var controller = new RoleManagerController(loggerStub.Object,mapperStub.Object,repositoryStub.Object);
+
+            //Act
+            var result = await controller.GetRoleAsync(roleName);
+
+            //Assert
+            Assert.IsType<OkObjectResult>(result);
+        }
     }
 }
