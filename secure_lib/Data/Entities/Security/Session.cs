@@ -9,5 +9,6 @@ namespace secure_lib.Data.Entities.Security
         public string Token { get; set; }
         public DateTime DateCreated { get; set; }
         public bool Status { get; set; }
+        public User SessionUser { get; set; }
     }
 }
