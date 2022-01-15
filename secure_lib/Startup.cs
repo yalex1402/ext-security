@@ -18,6 +18,8 @@ using Microsoft.OpenApi.Models;
 using secure_lib.Data;
 using secure_lib.Data.Interfaces.Repositories;
 using secure_lib.Data.Repositories;
+using secure_lib.Helpers.Conversors;
+using secure_lib.Helpers.Interfaces;
 using secure_lib.Models.Configuration;
 
 namespace secure_lib
@@ -53,6 +55,7 @@ namespace secure_lib
             });
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
