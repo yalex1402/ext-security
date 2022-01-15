@@ -16,11 +16,11 @@ namespace secure_lib.Controllers.Security
     {
         private readonly ILogger<RoleManagerController> _logger;
         private readonly IMapper _mapper;
-        private readonly IRepository _repository;
+        private readonly IRoleRepository _repository;
 
         public RoleManagerController(ILogger<RoleManagerController> logger,
                                     IMapper mapper,
-                                    IRepository repository)
+                                    IRoleRepository repository)
         {
             _logger = logger;
             _mapper = mapper;

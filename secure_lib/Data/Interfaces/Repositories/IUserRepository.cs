@@ -1,6 +1,6 @@
 namespace secure_lib.Data.Interfaces.Repositories
 {
-    public interface IRepository : IRoleRepository
+    public interface IUserRepository
     {
         
     }
