@@ -10,7 +10,7 @@ using secure_lib.Models.BindingModels;
 using secure_lib.Models.Dto;
 using Xunit;
 
-namespace secure_lib.Tests
+namespace secure_lib.Tests.ControllerTests 
 {
     public class RoleManagerControllerTests
     {
@@ -22,7 +22,7 @@ namespace secure_lib.Tests
             {
                 Name = "Admin"
             };
-            var repositoryStub = new Mock<IRepository>();
+            var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
                 .Setup(repo => repo.CreateRoleAsync(It.IsAny<RoleDtoModel>()))
                 .ReturnsAsync((RoleDtoModel)null);
@@ -43,7 +43,7 @@ namespace secure_lib.Tests
         {
             //Arrange
             string roleName = "Developer";
-            var repositoryStub = new Mock<IRepository>();
+            var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
                 .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((RoleDtoModel)null);
@@ -64,7 +64,7 @@ namespace secure_lib.Tests
         {
             //Arrange
             string roleName = "";
-            var repositoryStub = new Mock<IRepository>();
+            var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
                 .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((RoleDtoModel)null);
@@ -85,7 +85,7 @@ namespace secure_lib.Tests
         {
             //Arrange
             string roleName = "Admin";
-            var repositoryStub = new Mock<IRepository>();
+            var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
                 .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(new RoleDtoModel());
