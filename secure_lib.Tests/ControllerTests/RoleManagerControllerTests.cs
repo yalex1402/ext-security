@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using secure_lib.Controllers.Security;
+using secure_lib.Data.Entities.Security;
 using secure_lib.Data.Interfaces.Repositories;
+using secure_lib.Helpers.Interfaces;
 using secure_lib.Models.BindingModels;
 using secure_lib.Models.Dto;
 using Xunit;
@@ -24,12 +26,14 @@ namespace secure_lib.Tests.ControllerTests
             };
             var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
-                .Setup(repo => repo.CreateRoleAsync(It.IsAny<RoleDtoModel>()))
-                .ReturnsAsync((RoleDtoModel)null);
+                .Setup(repo => repo.CreateRoleAsync(It.IsAny<Role>()))
+                .ReturnsAsync(false);
             var loggerStub = new Mock<ILogger<RoleManagerController>>();
-            var mapperStub = new Mock<IMapper>();
-            mapperStub.Setup(map => map.Map<RoleDtoModel>(It.IsAny<AddUpdateRoleModel>())).Returns(new RoleDtoModel());
-            var controller = new RoleManagerController(loggerStub.Object,mapperStub.Object,repositoryStub.Object);
+            var converterStub = new Mock<IConverterHelper>();
+            converterStub
+                .Setup(conv => conv.ConvertTo<Role,AddUpdateRoleModel>(It.IsAny<AddUpdateRoleModel>()))
+                .Returns(new Role());
+            var controller = new RoleManagerController(loggerStub.Object,repositoryStub.Object,converterStub.Object);
 
             //Act
             var result = await controller.CreateRoleAsync(model);
@@ -46,11 +50,13 @@ namespace secure_lib.Tests.ControllerTests
             var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
                 .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
-                .ReturnsAsync((RoleDtoModel)null);
+                .ReturnsAsync((Role)null);
             var loggerStub = new Mock<ILogger<RoleManagerController>>();
-            var mapperStub = new Mock<IMapper>();
-            mapperStub.Setup(map => map.Map<RoleDtoModel>(It.IsAny<AddUpdateRoleModel>())).Returns(new RoleDtoModel());
-            var controller = new RoleManagerController(loggerStub.Object,mapperStub.Object,repositoryStub.Object);
+            var converterStub = new Mock<IConverterHelper>();
+            converterStub
+                .Setup(conv => conv.ConvertTo<RoleDtoModel,Role>(It.IsAny<Role>()))
+                .Returns(new RoleDtoModel());
+            var controller = new RoleManagerController(loggerStub.Object,repositoryStub.Object,converterStub.Object);
 
             //Act
             var result = await controller.GetRoleAsync(roleName);
@@ -67,11 +73,13 @@ namespace secure_lib.Tests.ControllerTests
             var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
                 .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
-                .ReturnsAsync((RoleDtoModel)null);
+                .ReturnsAsync((Role)null);
             var loggerStub = new Mock<ILogger<RoleManagerController>>();
-            var mapperStub = new Mock<IMapper>();
-            mapperStub.Setup(map => map.Map<RoleDtoModel>(It.IsAny<AddUpdateRoleModel>())).Returns(new RoleDtoModel());
-            var controller = new RoleManagerController(loggerStub.Object,mapperStub.Object,repositoryStub.Object);
+            var converterStub = new Mock<IConverterHelper>();
+            converterStub
+                .Setup(conv => conv.ConvertTo<RoleDtoModel,Role>(It.IsAny<Role>()))
+                .Returns(new RoleDtoModel());
+            var controller = new RoleManagerController(loggerStub.Object,repositoryStub.Object,converterStub.Object);
 
             //Act
             var result = await controller.GetRoleAsync(roleName);
@@ -88,12 +96,14 @@ namespace secure_lib.Tests.ControllerTests
             var repositoryStub = new Mock<IRoleRepository>();
             repositoryStub
                 .Setup(repo => repo.GetRoleByNameAsync(It.IsAny<string>()))
-                .ReturnsAsync(new RoleDtoModel());
+                .ReturnsAsync(new Role());
             var loggerStub = new Mock<ILogger<RoleManagerController>>();
-            var mapperStub = new Mock<IMapper>();
-            mapperStub.Setup(map => map.Map<RoleDtoModel>(It.IsAny<AddUpdateRoleModel>())).Returns(new RoleDtoModel());
-            var controller = new RoleManagerController(loggerStub.Object,mapperStub.Object,repositoryStub.Object);
-
+            var converterStub = new Mock<IConverterHelper>();
+            converterStub
+                .Setup(conv => conv.ConvertTo<RoleDtoModel,Role>(It.IsAny<Role>()))
+                .Returns(new RoleDtoModel());
+            var controller = new RoleManagerController(loggerStub.Object,repositoryStub.Object,converterStub.Object);
+            
             //Act
             var result = await controller.GetRoleAsync(roleName);
 

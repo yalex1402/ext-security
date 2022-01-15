@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using secure_lib.Data.Entities.Security;
 using secure_lib.Data.Interfaces.Repositories;
+using secure_lib.Helpers.Interfaces;
 using secure_lib.Models.BindingModels;
 using secure_lib.Models.Dto;
 
@@ -15,16 +17,16 @@ namespace secure_lib.Controllers.Security
     public class RoleManagerController : ControllerBase
     {
         private readonly ILogger<RoleManagerController> _logger;
-        private readonly IMapper _mapper;
         private readonly IRoleRepository _repository;
+        private readonly IConverterHelper _converterHelper;
 
         public RoleManagerController(ILogger<RoleManagerController> logger,
-                                    IMapper mapper,
-                                    IRoleRepository repository)
+                                    IRoleRepository repository,
+                                    IConverterHelper converterHelper)
         {
             _logger = logger;
-            _mapper = mapper;
             _repository = repository;
+            _converterHelper = converterHelper;
         }
 
         [HttpPost("CreateRole")]
@@ -39,8 +41,9 @@ namespace secure_lib.Controllers.Security
                 model.Id = Guid.NewGuid().ToString();
                 model.Status = true;
                 model.DateCreated = DateTime.UtcNow;
-                var result = await _repository.CreateRoleAsync(_mapper.Map<RoleDtoModel>(model));
-                if (result == null)
+                Role entityModel = _converterHelper.ConvertTo<Role,AddUpdateRoleModel>(model);
+                var result = await _repository.CreateRoleAsync(entityModel);
+                if (!result)
                 {
                     return BadRequest("Role could not be created");
                 }
@@ -74,7 +77,7 @@ namespace secure_lib.Controllers.Security
                 {
                     return NotFound($"Role {roleName} is not found");
                 }
-                return Ok(result);
+                return Ok(_converterHelper.ConvertTo<RoleDtoModel,Role>(result));
             }
             catch (SqlException sqlex)
             {
@@ -96,7 +99,8 @@ namespace secure_lib.Controllers.Security
             try
             {
                 var result = await _repository.GetActiveRolesAsync();
-                return Ok(result);
+                List<RoleDtoModel> rolesFound = _converterHelper.ConvertTo<List<RoleDtoModel>,List<Role>>(result);
+                return Ok(rolesFound);
             }
             catch (SqlException sqlex)
             {

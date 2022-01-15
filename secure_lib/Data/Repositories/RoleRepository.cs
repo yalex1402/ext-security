@@ -21,34 +21,34 @@ namespace secure_lib.Data.Repositories
             _mapper = mapper;
         }
 
-        public async Task<RoleDtoModel> CreateRoleAsync(RoleDtoModel model)
+        public async Task<bool> CreateRoleAsync(Role model)
         {
             var searchUserResult = await GetRoleByNameAsync(model.Name);
             if (searchUserResult != null)
             {
-                return null;
+                return false;
             }
-            _dataContext.Roles.Add(_mapper.Map<Role>(model));
+            _dataContext.Roles.Add(model);
             int result = await _dataContext.SaveChangesAsync();
             if (result != 0)
             {
-                return model;
+                return true;
             }
-            return null;
+            return false;
         }
 
-        public async Task<RoleDtoModel> GetRoleByNameAsync(string roleName)
+        public async Task<Role> GetRoleByNameAsync(string roleName)
         {
             var roleFound = await _dataContext.Roles
                                             .Where(r => r.Name == roleName)
                                             .FirstOrDefaultAsync();
-            return _mapper.Map<RoleDtoModel>(roleFound);
+            return roleFound;
         }
 
-        public async Task<List<RoleDtoModel>> GetActiveRolesAsync()
+        public async Task<List<Role>> GetActiveRolesAsync()
         {
             List<Role> roles = await _dataContext.Roles.Where(r => r.Status == true).ToListAsync();
-            return _mapper.Map<List<RoleDtoModel>>(roles);
+            return roles;
         }
     }
 }

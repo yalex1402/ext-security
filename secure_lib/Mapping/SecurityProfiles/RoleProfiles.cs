@@ -10,9 +10,11 @@ namespace secure_lib.Mapping.SecurityProfiles
         public RoleProfiles()
         {
             CreateMap<AddUpdateRoleModel,RoleDtoModel>();
+            CreateMap<AddUpdateRoleModel,Role>();
             CreateMap<RoleDtoModel,AddUpdateRoleModel>();
             CreateMap<RoleDtoModel,Role>();
             CreateMap<Role,RoleDtoModel>();
+            
         }
     }
 }
