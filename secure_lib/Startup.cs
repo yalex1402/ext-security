@@ -21,6 +21,10 @@ using secure_lib.Data.Repositories;
 using secure_lib.Helpers.Conversors;
 using secure_lib.Helpers.Interfaces;
 using secure_lib.Models.Configuration;
+using secure_lib.Services.Interfaces.Security;
+using secure_lib.Services.Interfaces.Utilities;
+using secure_lib.Services.Security;
+using secure_lib.Services.Utilities;
 
 namespace secure_lib
 {
@@ -56,6 +60,8 @@ namespace secure_lib
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IJwtTokenFactoryService, JwtTokenFactoryService>();
+            services.AddScoped<IPasswordService, PasswordService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
