@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
@@ -115,6 +116,7 @@ namespace secure_lib.Controllers.Security
         }
 
         [HttpPost("AssignRole")]
+        [Authorize]
         public async Task<IActionResult> AssignRoleAsync([FromBody] AssignRoleModel model)
         {
             try
