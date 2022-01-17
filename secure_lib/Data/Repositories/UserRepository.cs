@@ -35,5 +35,31 @@ namespace secure_lib.Data.Repositories
         {
             return await _dataContext.Users.Where(usr => usr.UserName == userName).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> CreateUserAsync(User user)
+        {
+            User userFound = await _dataContext.Users.Where(usr => usr.Email == user.Email).FirstOrDefaultAsync();
+            if (userFound != null)
+            {
+                return false;
+            }
+            _dataContext.Users.Add(user);
+            int result = await _dataContext.SaveChangesAsync();
+            if (result != 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> AssignRoleAsync(User user, Role role)
+        {
+            user.UserRole = role;
+            var result = await _dataContext.SaveChangesAsync();
+            if (result != 0){
+                return true;
+            }
+            return false;
+        }
     }
 }

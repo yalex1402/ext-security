@@ -10,5 +10,7 @@ namespace secure_lib.Data.Interfaces.Repositories
         Task<List<User>> GetActiveUsersAsync();
         Task<User> GetUserByEmailAsync(string email);
         Task<User> GetUserByUserNameAsync(string userName);
+        Task<bool> CreateUserAsync(User user);
+        Task<bool> AssignRoleAsync(User user, Role role);
     }
 }
