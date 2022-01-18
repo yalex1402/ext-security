@@ -11,6 +11,7 @@ namespace secure_lib.Data.Entities.Security
         public string PasswordHash { get; set; }
         public bool Status { get; set; }
         public Role UserRole { get; set; }
+        public List<Token> SessionTokens { get; set; }
         public List<Session> SessionList { get; set; }
     }
 }

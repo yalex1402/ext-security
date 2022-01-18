@@ -1,8 +1,9 @@
 using System;
+using secure_lib.Data.Entities.Security;
 
-namespace secure_lib.Data.Entities.Security
+namespace secure_lib.Models.BindingModels
 {
-    public class Session
+    public class AddSessionModel
     {
         public string Id { get; set; }
         public string UserId { get; set; }

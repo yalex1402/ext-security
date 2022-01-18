@@ -21,6 +21,7 @@ namespace secure_lib.Controllers.Security
         private readonly ILogger<UserManagerController> _logger;
         private readonly IUserRepository _repository;
         private readonly IRoleRepository _roleRepository;
+        private readonly ISessionRepository _sessionRepository;
         private readonly IConverterHelper _converterHelper;
         private readonly IJwtTokenFactoryService _tokenFactory;
         private readonly IPasswordService _passwordService;
@@ -28,6 +29,7 @@ namespace secure_lib.Controllers.Security
         public UserManagerController(ILogger<UserManagerController> logger,
                                     IUserRepository repository,
                                     IRoleRepository roleRepository,
+                                    ISessionRepository sessionRepository,
                                     IConverterHelper converterHelper,
                                     IJwtTokenFactoryService tokenFactory,
                                     IPasswordService passwordService)
@@ -35,6 +37,7 @@ namespace secure_lib.Controllers.Security
             _logger = logger;
             _repository = repository;
             _roleRepository = roleRepository;
+            _sessionRepository = sessionRepository;
             _converterHelper = converterHelper;
             _tokenFactory = tokenFactory;
             _passwordService = passwordService;
@@ -54,16 +57,27 @@ namespace secure_lib.Controllers.Security
                 {
                     return NotFound($"User {model.UserName} is not registered");
                 }
-                //Compare Password
                 bool isValidPassword = _passwordService.ValidateHashCode(model.Password,userFound.PasswordHash);
                 if (!isValidPassword)
                 {
                     return BadRequest("User or password is not valid");
                 }
-                //Generate TokenModel
                 TokenModel tokenModel = _tokenFactory.GenerateToken(userFound);
-                //Create Session
-                
+                Token tokenEntity= _converterHelper.ConvertTo<Token,TokenModel>(tokenModel);
+                Session session = new Session()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    DateCreated = DateTime.UtcNow,
+                    SessionUser = userFound,
+                    Token = tokenEntity,
+                    Status = true,
+                    UserId = userFound.Id
+                };
+                var isSessionCreated = await _sessionRepository.CreateSessionAsync(session);
+                if (!isSessionCreated)
+                {
+                    return BadRequest("Session creation failed");
+                }
                 return Ok(new TokenDtoModel(tokenModel.TokenGenerated,tokenModel.ExpiresIn));
             }
             catch (SqlException sqlex)
