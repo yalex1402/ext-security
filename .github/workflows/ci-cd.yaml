@@ -17,7 +17,7 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore './secure_lib/secure_lib.csproj'
 
       - name: Build Application
-        run: dotnet build -c Release --no-restore
+        run: dotnet build './secure_lib/secure_lib.csproj' -c Release --no-restore
