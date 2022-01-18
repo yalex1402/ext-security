@@ -24,3 +24,13 @@ jobs:
       
       - name: Unit Tests
         run: dotnet test './secure_lib.Tests/secure_lib.Tests.csproj'
+
+      - name: Publish Application
+        run: dotnet publish './secure_lib/secure_lib.csproj' -c Release -o './out'
+
+      - name: Deploy on Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: secure-library
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_SECRET }}
+          package: './out'
