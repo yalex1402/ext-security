@@ -59,6 +59,7 @@ namespace secure_lib
             });
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ISessionRepository, SessionRepository>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IJwtTokenFactoryService, JwtTokenFactoryService>();
             services.AddScoped<IPasswordService, PasswordService>();
