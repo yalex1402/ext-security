@@ -1,3 +1,5 @@
+![CI/CD](https://github.com/yalex1402/ext-security/actions/workflows/ci-cd.yaml/badge.svg)
+
 # Secure_Lib
 The standard library was developed in .Net 5. It's for the authentication and authorization process.
 This library does not use Identity provided by .Net. Secure_Lib is created like an own study project and does not pretend to be better than the Identity library.
