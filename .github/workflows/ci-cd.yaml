@@ -21,3 +21,6 @@ jobs:
 
       - name: Build Application
         run: dotnet build './secure_lib/secure_lib.csproj' -c Release --no-restore
+      
+      - name: Unit Tests
+        run: dotnet test './secure_lib/secure_lib.csproj'
